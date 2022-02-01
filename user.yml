@@ -1,16 +1,26 @@
 ---
 - name: user
   hosts: demo
-  vars_files:
-    - ./my_vars.yml
   tasks:
-    - name: Create user
-    - vars:
-        user: palamiko
-      user:
-        name: "{{ user }}"
-        state: present
+    - name: Preconfig block
+      block:
+      - name: Create user
+        user:
+          name: "{{ user }}"
+          state: present
+        register: error
+
+      - name: Install curl
+        apt:
+          name: "{{ app }}"
+          update-cache: yes
+        register: error
       become: yes
-      register: out
-    - debug:
-        var: out
+      rescue:
+        - name: Some error print
+          debug:
+            var: error
+      always:
+        - name: Reboot
+          debug:
+            msg: "REbooooot"

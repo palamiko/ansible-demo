@@ -5,7 +5,12 @@
     - ./my_vars.yml
   tasks:
     - name: Create user
+    - vars:
+        user: palamiko
       user:
         name: "{{ user }}"
         state: present
       become: yes
+      register: out
+    - debug:
+        var: out

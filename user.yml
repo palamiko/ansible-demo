@@ -1,8 +1,11 @@
 ---
 - name: user
   hosts: demo
+  vars_files:
+    - ./my_vars.yml
   tasks:
     - name: Create user
       user:
-        name: palamiko
+        name: "{{ user }}"
         state: present
+      become: yes

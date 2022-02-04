@@ -15,7 +15,14 @@
           name: "{{ app }}"
           update-cache: yes
         register: error
+
+      - name: Fail on FAILED
+        command: echo "FAILED"
+        register: command_result
+        failed_when: "'FAILED' in command_result.stdout"
+
       become: yes
+
       rescue:
         - name: Some error print
           debug:
